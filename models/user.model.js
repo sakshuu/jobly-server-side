@@ -3,27 +3,40 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     fullname: {
         type: String,
-        required: true
+        default: ""
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        sparse: true,
+        default: null
     },
     phoneNumber: {
-        type: Number,
-        required: true
-    },
-    password:{
         type: String,
-        required: true,
+        sparse: true,
+        default: null
     },
-    role:{
+    password: {
+        type: String
+    },
+    googleId: {
         type: String,
-        enum: ['student', 'recruiter'],
-        required: true
+        default: ""
     },
-    profile:{
+    authProvider: {
+        type: String,
+        enum: ['google', 'phone', 'email'],
+        default: 'email'
+    },
+    role: {
+        type: String,
+        enum: ['student', 'recruiter', 'pending'],
+        default: 'pending'
+    },
+    isOnboarded: {
+        type: Boolean,
+        default: false
+    },
+    profile: {
         bio: { type: String, default: "" },
         skills: [{ type: String }],
         resume: { type: String, default: "" }, // URL to resume file
@@ -84,10 +97,10 @@ const userSchema = new mongoose.Schema({
             default: 1
         }
     },
-    refreshToken:{
+    refreshToken: {
         type: String,
         default: ""
     }
-},{timestamps:true});
+},{timestamps: true});
 
 export const User = mongoose.model('User', userSchema);
