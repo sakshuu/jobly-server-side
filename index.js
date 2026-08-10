@@ -16,9 +16,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
-// origin:'https://jobly-client-side.vercel.app',
+// origin:'http://localhost:5173',
 const corsOptions = {
-    origin:'http://localhost:5173',
+    origin:'https://jobly-client-side.vercel.app',
     credentials:true 
     
 }
