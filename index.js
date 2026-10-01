@@ -22,8 +22,8 @@ app.use(cookieParser());
 //     credentials:true 
     
 // }
+// "http://localhost:5173",
 const allowedOrigins = [
-    "http://localhost:5173",
     "https://jobly-client-side.vercel.app"
 ];
 
