@@ -1,3 +1,5 @@
+const isNonEmptyString = (str) => typeof str === "string" && str.trim().length > 0;
+
 export const calculateProfileScore = (user) => {
     if (!user) return { profileCompletion: 0, stars: 1 };
 
@@ -5,17 +7,17 @@ export const calculateProfileScore = (user) => {
     let score = 0;
 
     // 1. Basic details (Bio & Photo) - 20%
-    if (profile.bio && profile.bio.trim().length > 0) score += 10;
-    if (profile.profilePhoto && profile.profilePhoto.trim().length > 0) score += 10;
+    if (isNonEmptyString(profile.bio)) score += 10;
+    if (isNonEmptyString(profile.profilePhoto)) score += 10;
 
     // 2. Skills - 15%
     if (Array.isArray(profile.skills) && profile.skills.length > 0) score += 15;
 
     // 3. Resume Upload - 15%
-    if (profile.resume && profile.resume.trim().length > 0) score += 15;
+    if (isNonEmptyString(profile.resume)) score += 15;
 
     // 4. LinkedIn Link (Mandatory Social Link) - 15%
-    if (profile.socialLinks && profile.socialLinks.linkedin && profile.socialLinks.linkedin.trim().length > 0) {
+    if (profile.socialLinks && isNonEmptyString(profile.socialLinks.linkedin)) {
         score += 15;
     }
 

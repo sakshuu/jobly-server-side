@@ -104,7 +104,10 @@ export const login = async (req, res) => {
             });
         }
 
-        // Recalculate score on login
+        // Recalculate score on login safely
+        if (!userDoc.profile) {
+            userDoc.profile = {};
+        }
         const { profileCompletion, stars } = calculateProfileScore(userDoc);
         userDoc.profile.profileCompletion = profileCompletion;
         userDoc.profile.stars = stars;
@@ -136,9 +139,16 @@ export const login = async (req, res) => {
             success: true
         });
     } catch (error) {
-        console.log(error);
+        console.error("Login Error details:", error);
+        
+        let errorMessage = error.message || "Internal server error during login.";
+        if (error.code === 'ENOTFOUND' || error.name === 'MongooseServerSelectionError' || error.message?.includes('ENOTFOUND')) {
+            errorMessage = "Database connection failed. Please check your internet connection or MongoDB Atlas access.";
+        }
+
         return res.status(500).json({
-            message: "Internal server error during login.",
+            message: errorMessage,
+            error: error.message,
             success: false
         });
     }
@@ -181,6 +191,9 @@ export const googleAuth = async (req, res) => {
             }
         }
 
+        if (!userDoc.profile) {
+            userDoc.profile = {};
+        }
         const { profileCompletion, stars } = calculateProfileScore(userDoc);
         userDoc.profile.profileCompletion = profileCompletion;
         userDoc.profile.stars = stars;
@@ -292,6 +305,9 @@ export const phoneAuth = async (req, res) => {
             });
         }
 
+        if (!userDoc.profile) {
+            userDoc.profile = {};
+        }
         const { profileCompletion, stars } = calculateProfileScore(userDoc);
         userDoc.profile.profileCompletion = profileCompletion;
         userDoc.profile.stars = stars;

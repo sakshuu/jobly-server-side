@@ -16,14 +16,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
-// const corsOptions = {
-//     origin:'http://localhost:5173',
-//     origin:'https://jobly-client-side.vercel.app',
-//     credentials:true 
-    
-// }
-// "http://localhost:5173",
+
 const allowedOrigins = [
+    "http://localhost:5173",
     "https://jobly-client-side.vercel.app"
 ];
 
@@ -51,7 +46,10 @@ app.use("/api/v1/application", applicationRoute);
 
 
 
-app.listen(PORT,()=>{
-    connectDB();
-    console.log(`Server running at port ${PORT}`);
-})
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running at port ${PORT}`);
+    });
+}).catch((err) => {
+    console.error("Database connection error:", err);
+});

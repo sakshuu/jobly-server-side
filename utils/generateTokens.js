@@ -1,16 +1,18 @@
 import jwt from "jsonwebtoken";
 
 export const generateAccessToken = (user) => {
+    const userId = user._id ? user._id.toString() : user.id;
     return jwt.sign(
-        { userId: user._id, role: user.role },
+        { userId, role: user.role },
         process.env.SECRET_KEY || "defaultaccesssecret",
         { expiresIn: "15m" }
     );
 };
 
 export const generateRefreshToken = (user) => {
+    const userId = user._id ? user._id.toString() : user.id;
     return jwt.sign(
-        { userId: user._id },
+        { userId },
         process.env.REFRESH_TOKEN_SECRET || process.env.SECRET_KEY || "defaultrefreshsecret",
         { expiresIn: "7d" }
     );
